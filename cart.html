@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - F-Shop</title>
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+        type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <!-- Google Materrial - Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header" class="header"></div>
+
+        <section class="cart">
+            <div class="cart-container">
+                <div class="product-top">
+                    <div class="product-top-title">
+                        <h3 class="heading-page">
+                            <a href="index.html">Shop</a> / <span>Cart</span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="cart-table-head">
+                    <h3>Shopping Cart</h3>
+                    <button class="btn btn-cart" onclick="clearCart()">Clear Cart</button>
+                </div>
+                <div class="cart-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Update</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="cart-total-price">
+                    <div id="cart-origin-total">
+
+                    </div>
+                    <div id="cart-total-checkout">
+
+                    </div>
+                </div>
+                <div class="cart-button">
+                    <a href="#" class="btn btn-cart" onclick="checkout()">Checkout</a>
+                    <a href="product.html" class="btn btn-cart">Continue Shopping</a>
+                </div>
+            </div>
+        </section>
+        <div id="footer" class="footer"></div>
+    </div>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $("#header").load("header.html");
+            $("#footer").load("footer.html");
+        });
+
+        // cart local storage
+        var storageKey = "cart";
+        var cart = [];
+
+        var cartItem = {
+            "id": "1",
+            "idProduct": "1",
+            "name": "Bike",
+            "price": "100",
+            "discount": "10",
+            "image": "assets/images/product-1.jpg",
+            "quantity": "1"
+        };
+
+
+        function addItem(id) {
+            var cart = JSON.parse(localStorage.getItem(storageKey));
+            if (cart == null) {
+                cart = [];
+                cartItem.id = "1";
+            }
+            else {
+                cartItem.id = cart.length + 1;
+            }
+            let item = products.find(function (item) {
+                return item.id == id;
+            });
+            cartItem.idProduct = item.id;
+            cartItem.name = item.name;
+            cartItem.price = item.price;
+            cartItem.discount = item.discount;
+            cartItem.image = item.image;
+            cartItem.quantity = 1;
+            cart.push(cartItem);
+            localStorage.setItem(storageKey, JSON.stringify(cart));
+            console.log(localStorage.getItem(storageKey));
+            cartHeader();
+            showCart();
+        }
+
+        function resetIdCart() {
+            var cart = JSON.parse(localStorage.getItem(storageKey));
+            if (cart == null) {
+                cart = [];
+            }
+            else {
+                for (let i = 0; i < cart.length; i++) {
+                    cart[i].id = i + 1;
+                }
+            }
+            localStorage.setItem(storageKey, JSON.stringify(cart));
+        }
+
+        function showCart() {
+            resetIdCart();
+            var cart = JSON.parse(localStorage.getItem(storageKey));
+            if (cart == null) {
+                cart = [];
+            }
+            var cartList = $("#cart");
+            cartList.empty();
+            var total = 0;
+            var originTotal = 0;
+            for (var i = 0; i < cart.length; i++) {
+                var item = cart[i];
+                originTotal = originTotal + (item.price * item.quantity);
+                var totalItem = item.price - item.price * item.discount / 100;
+                totalItem = totalItem * item.quantity;
+                var itemHtml =
+                    `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td><img src="${item.image}" height="40" alt=""></td>
+                        <td>${item.price.toFixed(3)}đ</td>
+                        <td>${item.discount}%</td>
+                        <td>
+                            <input id="cart${item.id}" type="number" value="${item.quantity}">
+                        </td>
+                        <td>${totalItem.toFixed(3)}đ</td>
+                        <td><button onclick="updateItem(${item.id})">Update</button></td>
+                        <td><button onclick="removeItem(${item.id})">Remove</button></td>
+                        </tr>`;
+                cartList.append(itemHtml);
+                total += totalItem;
+            }
+            $("#cart-origin-total").html(`<h3>Ước tính: ${originTotal.toFixed(3)}đ</h3>`);
+            $("#cart-total-checkout").html(`<h3>Thành tiền: ${total.toFixed(3)}đ</h3>`);
+            $("#cart-total").html(`<h3>Total: ${total.toFixed(3)}đ</h3>`);
+        }
+
+        function updateItem(id) {
+            var cart = JSON.parse(localStorage.getItem(storageKey));
+            var quantity = $("#cart" + id).val();
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id == id) {
+                    cart[i].quantity = quantity;
+                }
+            }
+            localStorage.setItem(storageKey, JSON.stringify(cart));
+            showCart();
+        }
+
+        function removeItem(id) {
+            var cart = JSON.parse(localStorage.getItem(storageKey));
+            for (var i = 0; i < cart.length; i++) {
+                if (cart[i].id == id) {
+                    cart.splice(i, 1);
+                    break;
+                }
+            }
+            localStorage.setItem(storageKey, JSON.stringify(cart));
+            cartHeader();
+            showCart();
+        }
+
+        function clearCart() {
+            localStorage.removeItem(storageKey);
+            showCart();
+            cartHeader();
+        }
+
+        function cartHeader() {
+            var cart = localStorage.getItem(storageKey);
+            if (cart) {
+                cart = JSON.parse(cart);
+                var cartTotal = 0;
+                for (var i = 0; i < cart.length; i++) {
+                    var item = cart[i];
+                    var totalItem = item.price - item.price * item.discount / 100;
+                    totalItem = totalItem * item.quantity;
+                    cartTotal += totalItem;
+                }
+                $("#cart-count").text("Giỏ hàng(" + cart.length + ")");
+                $("#cart-total").text("/ " + cartTotal.toFixed(3) + "đ");
+            }
+            $("#cart-mini").show();
+            $("#cart-mini").css("display", "flex");
+            $("#cart-mini").css("opacity", "1");
+            $("#cart-mini").css("transition", "all 0.5s ease-in-out");
+        }
+
+        // checkout
+        function checkout() {
+            clearCart();
+            alert("Thank you for your purchase!");
+            window.location.href = "index.html";
+            showCart();
+        }
+
+
+        showCart();
+    </script>
+
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

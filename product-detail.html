@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - F-Shop</title>
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+        type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <!-- Google Materrial - Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+
+    <!-- Slider -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header" class="header"></div>
+        <section class="product-detail">
+            <div class="product-detail-container">
+                <div class="product-top">
+                    <div class="product-top-title">
+                        <h3 class="heading-page">
+                            <a href="product.html">Sản phẩm</a> / <span>Chi tiết sản phẩm</span>
+                        </h3>
+                    </div>
+                </div>
+                <div id="product-detail">
+
+                </div>
+            </div>
+        </section>
+        <div id="footer" class="footer"></div>
+    </div>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        function cartPage() {
+            window.location.href = "cart.html";
+        }
+        function backPage() {
+            window.location.href = "product.html";
+        }
+        $(document).ready(function () {
+            $("#header").load("header.html");
+            $("#footer").load("footer.html");
+        });
+
+        var product = JSON.parse(localStorage.getItem("viewProduct"));
+        console.log(product);
+        var productDetail = "";
+        productDetail += `
+            <div class="product-detail-img">
+                <img src="${product.image}" alt="">
+            </div>
+            <div class="product-detail-info">
+                <h1>${product.name}</h1>
+                <p>${product.description}</p>
+                <p>Giá: ${product.price.toFixed(3)}đ</p>
+                <p>Giảm giá: ${product.discount}%</p>
+                <div>
+                    <label for="quantity">Số lượng:</label>
+                    <input type="number" value="1" min="1" max="100" id="quantity">
+                </div>
+                <button class="btn btn-cart" onclick="addItem(${product.id})">Đặt mua</button>
+            </div>`;
+        $("#product-detail").html(productDetail);
+
+        var storageKey = "cart";
+        var cart = [];
+
+        var cartItem = {
+            "id": "1",
+            "idProduct": "1",
+            "name": "Bike",
+            "price": "100",
+            "discount": "10",
+            "image": "assets/images/product-1.jpg",
+            "quantity": "1"
+        };
+
+        function addItem(id) {
+            var cart = JSON.parse(localStorage.getItem(storageKey));
+            if (cart == null) {
+                cart = [];
+                cartItem.id = "1";
+            }
+            else {
+                cartItem.id = cart.length + 1;
+            }
+            cartItem.idProduct = product.id;
+            cartItem.name = product.name;
+            cartItem.price = product.price;
+            cartItem.discount = product.discount;
+            cartItem.image = product.image;
+            cartItem.quantity = $("#quantity").val();
+            cart.push(cartItem);
+            localStorage.setItem(storageKey, JSON.stringify(cart));
+            console.log(localStorage.getItem(storageKey));
+            cartHeader();
+        }
+
+        function cartHeader() {
+            var cart = localStorage.getItem(storageKey);
+            if (cart) {
+                cart = JSON.parse(cart);
+                var cartTotal = 0;
+                for (var i = 0; i < cart.length; i++) {
+                    var item = cart[i];
+                    var totalItem = item.price - item.price * item.discount / 100;
+                    totalItem = totalItem * item.quantity;
+                    cartTotal += totalItem;
+                }
+                $("#cart-count").text("Giỏ hàng(" + cart.length + ")");
+                $("#cart-total").text("/ " + cartTotal.toFixed(3) + "đ");
+            }
+            $("#cart-mini").show();
+            $("#cart-mini").css("display", "flex");
+            $("#cart-mini").css("opacity", "1");
+            $("#cart-mini").css("transition", "all 0.5s ease-in-out");
+        }
+
+
+    </script>
+
+    <!-- Slider -->
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+    <!-- Javascript -->
+    <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>

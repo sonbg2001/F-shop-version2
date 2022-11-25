@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products Manage - F-Shop</title>
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+        type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <!-- Google Materrial - Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/adminstyle.css">
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header" class="header"></div>
+        <section id="product" class="product">
+            <div class="product-container">
+                <div class="product-add">
+                    <div class="product-add-container">
+                        <div class="product-add-title">
+                            <h1>Add Product</h1>
+                            <button class="btn btn-danger" onclick="closeForm()">Close</button>
+                        </div>
+                        <div class="product-add-form">
+                            <div class="product-add-form-container">
+                                <div class="product-add-form-title">
+                                    <h2>Product Information</h2>
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-id">Product ID</label>
+                                    <input type="text" id="product-id" name="product-id" placeholder="Product ID" readonly>
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-name">Product Name</label>
+                                    <input type="text" name="product-name" id="product-name"
+                                        placeholder="Enter Product Name">
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-price">Product Price</label>
+                                    <input type="text" name="product-price" id="product-price"
+                                        placeholder="Enter Product Price">
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-discount">Product Discount</label>
+                                    <input type="text" name="product-discount" id="product-discount"
+                                        placeholder="Enter Product Discount">
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-type">Product Type</label>
+                                    <select name="product-type" id="product-type">
+                                        <option value="">Select Product Type</option>
+                                        <option value="shirt">Áo</option>
+                                        <option value="trousers">Quần</option>
+                                        <option value="shoes">Giày</option>
+                                    </select>
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-description">Product Description</label>
+                                    <textarea name="product-description" id="product-description"
+                                        placeholder="Enter Product Description"></textarea>
+                                </div>
+                                <div class="product-add-form-input">
+                                    <label for="product-image">Product Image</label>
+                                    <img src="" style="height:60px" alt="product-image-preview" id="product-image-preview">
+                                    <input type="file" name="product-image" id="product-image" onChange="img_pathUrl(this)">
+                                </div>
+                            </div>
+                            <div class="product-add-form-button">
+                                <button class="btn btn-primary" name="add-product" id="add-product" onclick="addItem()">Add
+                                    Product</button>
+                                <button class="btn btn-green" onclick="updateItem()">Update Product</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-header">
+                    <h1 class="heading">Product</h1>
+                    <button class="btn btn-primary" onclick="openForm()">Add Product</button>
+                </div>
+                <div class="product-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Image</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Remove</th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-body-list">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        <div id="footer" class="footer"></div>
+    </div>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        function closeForm() {
+            $('.product-add').hide();
+        }
+        function openForm() {
+            $('.product-add').show();
+        }
+        $(document).ready(function () {
+            $("#header").load("admin-header.html");
+            $("#footer").load("footer.html");
+        });
+        function img_pathUrl(input){
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#product-image-preview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        // products and products-Storage
+
+        let dataProducts = `[
+            {
+                "id": 1,
+                "name": "Áo thun nữ mỏng",
+                "price": 37,
+                "discount": 15,
+                "type": "shirt",
+                "description": "Áo thun in tay lỡ nữ freesize phông form rộng dáng Unisex - Ulzzang mặc cặp, nhóm, lớp hình BƯỚM MISSOUT BUTTERFLY",
+                "image": "assets/images/ao1.webp"
+            },
+            {
+                "id": 2,
+                "name": "Áo phông nữ cộc tay",
+                "price": 37,
+                "discount": 15,
+                "type": "shirt",
+                "description": "Áo thun nữ ,áo phông nữ cộc tay phối cổ dáng rộng 3 màu cực xinh",
+                "image": "assets/images/ao2.webp"
+            },
+            {
+                "id": 3,
+                "name": "Áo thun bóng rổ nữ",
+                "price": 62,
+                "discount": 8,
+                "type": "shirt",
+                "description": "Áo thun bóng rổ nữ - áo phông cộc tay phom rộng in số 11 phong cách hàn quốc",
+                "image": "assets/images/ao3.webp"
+            },
+            {
+                "id": 4,
+                "name": "Áo thun bóng rổ nữ",
+                "price": 62,
+                "discount": 8,
+                "type": "shirt",
+                "description": "Áo thun bóng rổ nữ - áo phông cộc tay phom rộng in số 11 phong cách hàn quốc",
+                "image": "assets/images/ao4.webp"
+            },
+            {
+                "id": 5,
+                "name": "Áo thun unisex",
+                "price": 340,
+                "discount": 20,
+                "type": "shirt",
+                "description": "Áo thun unisex Khổng Hiền from rộng cổ tròn tay lỡ freesize 38-70kg - LAVE OFF",
+                "image": "assets/images/ao5.webp"
+            },
+            {
+                "id": 6,
+                "name": "Áo phông tay lỡ",
+                "price": 340,
+                "discount": 22,
+                "type": "shirt",
+                "description": "Áo phông, Áo thun unisex from rộng cổ tròn tay lỡ freesize 38-70kg Tim nhỏ",
+                "image": "assets/images/ao6.webp"
+            },
+            {
+                "id": 7,
+                "name": "Áo thun unisex",
+                "price": 240,
+                "discount": 18,
+                "type": "shirt",
+                "description": "Áo phông, Áo thun unisex from rộng cổ tròn tay lỡ freesize 38-70kg Ghost",
+                "image": "assets/images/ao7.webp"
+            },
+            {
+                "id": 8,
+                "name": "Áo thun unisex Khổng Hiền",
+                "price": 566,
+                "discount": 48,
+                "type": "shirt",
+                "description": "Áo thun unisex Khổng Hiền from rộng cổ tròn tay lỡ freesize 38-70kg thun trắng",
+                "image": "assets/images/ao8.webp"
+            },
+            {
+                "id": 9,
+                "name": "Áo phông rộng freesize",
+                "price": 345,
+                "discount": 32,
+                "type": "shirt",
+                "description": "Áo phông rộng freesize nam nữ unisex chất đẹp from chuẩn",
+                "image": "assets/images/ao9.webp"
+            },
+            {
+                "id": 10,
+                "name": "ÁO SMOCKING KATE",
+                "price": 500,
+                "discount": 22,
+                "type": "shirt",
+                "description": "ÁO SMOCKING KATE CAO CẤP SEXY",
+                "image": "assets/images/ao10.webp"
+            },
+            {
+                "id": 11,
+                "name": "Quần ống rộng nữ 1 cúc",
+                "price": 390,
+                "discount": 6,
+                "type": "trousers",
+                "description": "Quần ống rộng nữ 1 cúc trước chất tuyết mưa nhiều màu tự nhiên",
+                "image": "assets/images/quan1.webp"
+            },
+            {
+                "id": 12,
+                "name": "Quần bò ống rộng nữ cạp cao",
+                "price": 103,
+                "discount": 23,
+                "type": "trousers",
+                "description": "Quần bò ống rộng nữ cạp cao, quần jeans ống rộng lưng cao, dáng suông baggy ống đứng, kiểu ulzzang Cherry T008",
+                "image": "assets/images/quan2.webp"
+            },
+            {
+                "id": 13,
+                "name": "Quần jean nữ co dãn Julido Store",
+                "price": 139,
+                "discount": 16,
+                "type": "trousers",
+                "description": "Quần jean nữ co dãn Julido Store, lưng cao mẫu mới màu đen JD8888",
+                "image": "assets/images/quan3.webp"
+            },
+            {
+                "id": 14,
+                "name": "Quần jean nữ lưng cao Julido",
+                "price": 126,
+                "discount": 22,
+                "type": "trousers",
+                "description": "Quần jean nữ lưng cao Julido, chất jean cotton co dãn tôn dáng phụ nữ eo thon mẫu KV03A",
+                "image": "assets/images/quan4.webp"
+            },
+            {
+                "id": 15,
+                "name": "Quần giả váy nữ ngắn vạt lệch đính cúc",
+                "price": 250,
+                "discount": 21,
+                "type": "trousers",
+                "description": "Quần giả váy nữ ngắn vạt lệch đính cúc, Quần đùi giả váy vạt lệch",
+                "image": "assets/images/quan5.webp"
+            },
+            {
+                "id": 16,
+                "name": "Quần yếm kaki Banamo fashion",
+                "price": 225,
+                "discount": 27,
+                "type": "trousers",
+                "description": "Quần yếm kaki Banamo fashion ống rộng dáng dài phối túi ngực màu be phong cách hàn quốc quần yếm kaki 565",
+                "image": "assets/images/quan6.webp"
+            },
+            {
+                "id": 17,
+                "name": "Quần đùi nữ cạp chun RÚT DÂY",
+                "price": 170,
+                "discount": 10,
+                "type": "trousers",
+                "description": "Quần đùi nữ cạp chun RÚT DÂY <55kg vải thun cotton short hot tiktok sooc cạp cao thể thao sexy aomi",
+                "image": "assets/images/quan7.webp"
+            },
+            {
+                "id": 18,
+                "name": "Quần yếm nữ King168",
+                "price": 180,
+                "discount": 5,
+                "type": "trousers",
+                "description": "Quần yếm nữ King168, yếm short nữ co dãn nhẹ mẫu mới DC13",
+                "image": "assets/images/quan8.webp"
+            },
+            {
+                "id": 19,
+                "name": "Quần Jean Nữ Lưng Cao thương hiệu Chandi",
+                "price": 290,
+                "discount": 33,
+                "type": "trousers",
+                "description": "Quần Jean Nữ Lưng Cao thương hiệu Chandi, chất jean cotton co dãn tôn dáng phụ nữ eo thon mẫu KV617",
+                "image": "assets/images/quan9.webp"
+            },
+            {
+                "id": 20,
+                "name": "Quần short jean nữ lưng cao phối rách denim cotton",
+                "price": 300,
+                "discount": 50,
+                "type": "trousers",
+                "description": "Quần short jean nữ lưng cao phối rách denim cotton, rin ngắn phối rách William - AT87",
+                "image": "assets/images/quan10.webp"
+            },
+            {
+                "id": 21,
+                "name": "Giày thể thao nữ GB2.5",
+                "price": 227,
+                "discount": 12,
+                "type": "shoes",
+                "description": "Giày thể thao nữ đi êm chân - GB2.5",
+                "image": "assets/images/giay1.webp"
+            },
+            {
+                "id": 22,
+                "name": "Giày nữ thấp cổ thêu hoa",
+                "price": 160,
+                "discount": 17,
+                "type": "shoes",
+                "description": "Giày nữ thấp cổ thêu hoa cúc siêu đáng yêu",
+                "image": "assets/images/giay2.webp"
+            },
+            {
+                "id": 23,
+                "name": "GIÀY NỮ | GIÀY THỂ THAO",
+                "price": 550,
+                "discount": 14,
+                "type": "shoes",
+                "description": "GIÀY NỮ | GIÀY THỂ THAO & THỜI TRANG",
+                "image": "assets/images/giay3.webp"
+            },
+            {
+                "id": 24,
+                "name": "GIÀY SNEAKERS NỮ",
+                "price": 250,
+                "discount": 12,
+                "type": "shoes",
+                "description": "GIÀY SNEAKERS NỮ KIỂU DÁNG TRẺ TRUNG THANH LỊCH",
+                "image": "assets/images/giay4.webp"
+            },
+            {
+                "id": 25,
+                "name": "Giày thể thao nữ phong cách Hàn quốc",
+                "price": 524,
+                "discount": 25,
+                "type": "shoes",
+                "description": "Giày thể thao nữ đế dày phong cách Hàn quốc mẫu mới nhất 2020 siêu đẹp",
+                "image": "assets/images/giay5.webp"
+            },
+            {
+                "id": 26,
+                "name": "Giày Biti's DSM074400XNH",
+                "price": 330,
+                "discount": 3,
+                "type": "shoes",
+                "description": "Giày Thể Thao Trung Cấp Nam Biti's DSM074400XNH",
+                "image": "assets/images/giay6.webp"
+            },
+            {
+                "id": 27,
+                "name": "Giày Nam Trắng các loại",
+                "price": 204,
+                "discount": 10,
+                "type": "shoes",
+                "description": "Giày Nam Thể Thao Nam Nữ Thời Trang (Trắng các loại)",
+                "image": "assets/images/giay7.webp"
+            },
+            {
+                "id": 28,
+                "name": "Giày nam K99",
+                "price": 270,
+                "discount": 11,
+                "type": "shoes",
+                "description": "Giày thể thao nam, giày nam da lộn K99",
+                "image": "assets/images/giay8.webp"
+            },
+            {
+                "id": 29,
+                "name": "Giày Nam Sneaker Live Running",
+                "price": 298,
+                "discount": 6,
+                "type": "shoes",
+                "description": "Giày Thể Thao Nam Sneaker Live Running Độn Gót Tăng Chiều Cao 5cm Cao Cấp Tặng Kèm Đồng Hồ Đeo Tay Nam Thời Trang",
+                "image": "assets/images/giay9.webp"
+            },
+            {
+                "id": 30,
+                "name": "Giày thể thao nam XD21",
+                "price": 319,
+                "discount": 26,
+                "type": "shoes",
+                "description": "Giày thể thao nam, giày sneaker nam da Xám - Trắng (2 màu) XD21",
+                "image": "assets/images/giay10.webp"
+            }
+        ]`;
+
+        let products;
+        if (localStorage.getItem("products") === null) {
+            products = JSON.parse(dataProducts);
+            localStorage.setItem("products", JSON.stringify(products));
+        }
+        else {
+            products = JSON.parse(localStorage.getItem("products"));
+        }
+
+        // products-list
+        function displayProducts() {
+            let html = "";
+            for (let i = 0; i < products.length; i++) {
+                html += `
+                <tr id="${products[i].id}" onclick="getItem(${products[i].id})">
+                    <td>${products[i].id}</td>
+                    <td>${products[i].name}</td>
+                    <td><img src="${products[i].image}" alt="${products[i].name}" height="40"></td>
+                    <td>${products[i].description}</td>
+                    <td>$${products[i].price}</td>
+                    <td>${products[i].discount}%</td>
+                    <td><button class="btn btn-danger" onclick="removeItem(${products[i].id})">Remove</button></td>
+                </tr>
+                `;
+            }
+            $("#product-body-list").html(html);
+        }
+
+        displayProducts();
+
+
+
+
+
+        // edit product local storage
+        var storageKey = "products";
+
+        var product = {
+            "id": "1",
+            "name": "Bike",
+            "price": "100",
+            "discount": "10",
+            "type": "bike",
+            "description": "This is a product description",
+            "image": "assets/images/product-1.jpg",
+        };
+
+
+        function addItem() {
+            let product = {
+                "id": products.length + 1,
+                "name": $("#product-name").val(),
+                "price": $("#product-price").val(),
+                "discount": $("#product-discount").val(),
+                "type": $("#product-type").val(),
+                "description": $("#product-description").val(),
+                "image": $("#product-image-preview").attr("src"),
+            };
+            console.log(product.image);
+            products.push(product);
+            localStorage.setItem(storageKey, JSON.stringify(products));
+            displayProducts();
+        }
+
+        function getItem(id) {
+            $(".product-add").show();
+            let product = products.find(product => product.id == id);
+            $("#product-id").val(product.id);
+            $("#product-name").val(product.name);
+            $("#product-price").val(product.price);
+            $("#product-discount").val(product.discount);
+            $("#product-type").val(product.type);
+            $("#product-description").val(product.description);
+            $("#product-image-preview").attr("src", product.image);
+            $("#product-image").val(product.image);
+        }
+
+        function resetIdProducts() {
+
+        }
+
+        function updateItem() {
+            let id = $("#product-id").val();
+            let product = products.find(product => product.id == id);
+            product.name = $("#product-name").val();
+            product.price = $("#product-price").val();
+            product.discount = $("#product-discount").val();
+            product.type = $("#product-type").val();
+            product.description = $("#product-description").val();
+            product.image = $("#product-image-preview").attr("src");
+            localStorage.setItem(storageKey, JSON.stringify(products));
+            displayProducts();
+        }
+
+        function removeItem(id) {
+            let item = products.find(function (item) {
+                return item.id == id;
+            });
+            products.splice(products.indexOf(item), 1);
+            localStorage.setItem(storageKey, JSON.stringify(products));
+            displayProducts();
+        }
+
+        displayProducts();
+
+
+    </script>
+</body>
+
+</html>

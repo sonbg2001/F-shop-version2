@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - F-Shop</title>
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet'
+        type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <!-- Google Materrial - Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/adminstyle.css">
+    <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon">
+
+    <!-- Slider -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header" class="header"></div>
+        <section id="dashboard" class="dashboard product">
+            <div class="dashboard-container">
+                <div class="dashboard-title">
+                    <h1 class="heading">Dashboard</h1>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-content-item">
+                        <h3>Total</h3>
+                        <span>$0</span>
+                    </div>
+                    <div class="dashboard-content-item">
+                        <h3>Products</h3>
+                        <span id="products-count"></span>
+                    </div>
+                    <div class="dashboard-content-item">
+                        <h3>Orders</h3>
+                        <span>6</span>
+                    </div>
+                    <div class="dashboard-content-item">
+                        <h3>Customers</h3>
+                        <span>5</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div id="footer" class="footer"></div>
+    </div>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        function cartPage() {
+            window.location.href = "cart.html";
+        }
+        $(document).ready(function () {
+            $("#header").load("admin-header.html");
+            $("#footer").load("footer.html");
+        });
+
+        var products;
+        if(localStorage.getItem("products") != null){
+            products = JSON.parse(localStorage.getItem("products"));
+        }
+        $(document).ready(function () {
+            $("#products-count").text(products.length);
+        });
+
+
+    </script>
+
+    <!-- Slider -->
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+
+    <!-- Javascript -->
+    <script src="assets/js/script.js"></script>
+
+</body>
+
+</html>

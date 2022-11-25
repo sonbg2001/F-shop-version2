@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - F-Shop</title>
+
+    <!-- Google Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,100' rel='stylesheet' type='text/css'>
+
+    <!-- Google Materrial - Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <!-- Font awesome cdn -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Css -->
+    <link rel="stylesheet" href="assets/css/style.css">
+
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header" class="header"></div>
+        <section class="category">
+            <div class="category-container">
+                <div class="product-top">
+                    <div class="product-top-title">
+                        <h3 class="heading-page">
+                            <a href="index.html">Trang chủ</a> / <span>Loại sản phẩm</span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="category-content">
+                        <div class="category-content-title">
+                            <h3 class="heading-page heading">
+                                <span>Loại sản phẩm</span>
+                            </h3>
+                        </div>
+                        <div class="category-content-list">
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category1.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category2.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category3.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category4.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category5.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category6.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category7.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category8.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category9.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category10.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category11.webp" alt="">
+                                </a>
+                            </div>
+                            <div class="category-content-list-item">
+                                <a href="product.html">
+                                    <img src="assets/images/category12.webp" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div id="footer" class="footer"></div>
+    </div>
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script>
+        function cartPage() {
+            window.location.href = "cart.html";
+        }
+        $(document).ready(function(){
+            $("#header").load("header.html");
+            $("#footer").load("footer.html");
+        });
+    </script>
+</body>
+</html>
